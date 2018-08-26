@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -44,8 +44,8 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
-// Trait which indicates whether this script type
-// must be assigned in the database.
+ // Trait which indicates whether this script type
+ // must be assigned in the database.
 template<typename>
 struct is_script_database_bound
     : std::false_type { };
@@ -172,7 +172,7 @@ public:
     void SetScriptNameInContext(std::string const& scriptname, std::string const& context)
     {
         ASSERT(_scriptnames_to_context.find(scriptname) == _scriptnames_to_context.end(),
-               "Scriptname was assigned to this context already!");
+            "Scriptname was assigned to this context already!");
         _scriptnames_to_context.insert(std::make_pair(scriptname, context));
     }
 
@@ -180,7 +180,7 @@ public:
     {
         auto itr = _scriptnames_to_context.find(scriptname);
         ASSERT(itr != _scriptnames_to_context.end() &&
-               "Given scriptname doesn't exist!");
+            "Given scriptname doesn't exist!");
         return itr->second;
     }
 
@@ -193,7 +193,7 @@ public:
         // since it's possible that new references to a shared library
         // are acquired when releasing.
         for (auto itr = _scriptnames_to_context.begin();
-                        itr != _scriptnames_to_context.end();)
+            itr != _scriptnames_to_context.end();)
             if (itr->second == context)
                 itr = _scriptnames_to_context.erase(itr);
             else
@@ -225,7 +225,7 @@ public:
     {
         _delayed_delete_queue.push_back(
             Trinity::make_unique<
-                DeleteableObject<typename std::decay<T>::type>
+            DeleteableObject<typename std::decay<T>::type>
             >(std::forward<T>(any))
         );
     }
@@ -266,7 +266,7 @@ class SpecializedScriptRegistry;
 template<class ScriptType>
 class ScriptRegistry final
     : public SpecializedScriptRegistry<
-        ScriptType, is_script_database_bound<ScriptType>::value>
+    ScriptType, is_script_database_bound<ScriptType>::value>
 {
     ScriptRegistry()
     {
@@ -367,7 +367,7 @@ class CreatureGameObjectScriptRegistrySwapHooks
         }
 
     private:
-        Unit* owner_;
+        Unit * owner_;
     };
 
     // Hook which is called before a creature is swapped
@@ -381,7 +381,7 @@ class CreatureGameObjectScriptRegistrySwapHooks
             creature->RemoveCharmedBy(nullptr);
 
         ASSERT(!creature->IsCharmed(),
-               "There is a disabled AI which is still loaded.");
+            "There is a disabled AI which is still loaded.");
 
         if (creature->IsAlive())
             creature->AI()->EnterEvadeMode();
@@ -391,11 +391,11 @@ class CreatureGameObjectScriptRegistrySwapHooks
     {
         bool const destroyed = creature->AIM_Destroy();
         ASSERT(destroyed,
-               "Destroying the AI should never fail here!");
+            "Destroying the AI should never fail here!");
         (void)destroyed;
 
         ASSERT(!creature->AI(),
-               "The AI should be null here!");
+            "The AI should be null here!");
     }
 
     // Hook which is called before a gameobject is swapped
@@ -409,21 +409,21 @@ class CreatureGameObjectScriptRegistrySwapHooks
         gameobject->AIM_Destroy();
 
         ASSERT(!gameobject->AI(),
-               "The AI should be null here!");
+            "The AI should be null here!");
     }
 
     // Hook which is called after a creature was swapped
     static void LoadInitializeScript(Creature* creature)
     {
         ASSERT(!creature->AI(),
-               "The AI should be null here!");
+            "The AI should be null here!");
 
         if (creature->IsAlive())
             creature->ClearUnitState(UNIT_STATE_EVADE);
 
         bool const created = creature->AIM_Create();
         ASSERT(created,
-               "Creating the AI should never fail here!");
+            "Creating the AI should never fail here!");
         (void)created;
     }
 
@@ -447,7 +447,7 @@ class CreatureGameObjectScriptRegistrySwapHooks
     static void LoadInitializeScript(GameObject* gameobject)
     {
         ASSERT(!gameobject->AI(),
-               "The AI should be null here!");
+            "The AI should be null here!");
 
         gameobject->AIM_Initialize();
     }
@@ -565,7 +565,7 @@ public:
         // Add the recently added scripts to the deleted scripts to replace
         // default AI's with recently added core scripts.
         ids_removed_.insert(static_cast<Base*>(this)->GetRecentlyAddedScriptIDs().begin(),
-                            static_cast<Base*>(this)->GetRecentlyAddedScriptIDs().end());
+            static_cast<Base*>(this)->GetRecentlyAddedScriptIDs().end());
 
         DestroyScriptIdsFromSet(ids_removed_);
         InitializeScriptIdsFromSet(ids_removed_);
@@ -586,15 +586,15 @@ private:
 template<typename Base>
 class ScriptRegistrySwapHooks<CreatureScript, Base>
     : public CreatureGameObjectScriptRegistrySwapHooks<
-        Creature, CreatureScript, Base
-      > { };
+    Creature, CreatureScript, Base
+    > { };
 
 // This hook is responsible for swapping GameObjectAI's
 template<typename Base>
 class ScriptRegistrySwapHooks<GameObjectScript, Base>
     : public CreatureGameObjectScriptRegistrySwapHooks<
-        GameObject, GameObjectScript, Base
-      > { };
+    GameObject, GameObjectScript, Base
+    > { };
 
 /// This hook is responsible for swapping BattlegroundScript's
 template<typename Base>
@@ -645,7 +645,7 @@ class ScriptRegistrySwapHooks<InstanceMapScript, Base>
     : public ScriptRegistrySwapHookBase
 {
 public:
-    ScriptRegistrySwapHooks()  : swapped(false) { }
+    ScriptRegistrySwapHooks() : swapped(false) { }
 
     void BeforeReleaseContext(std::string const& context) final override
     {
@@ -706,7 +706,7 @@ private:
 template<typename ScriptType>
 class SpecializedScriptRegistry<ScriptType, true>
     : public ScriptRegistryInterface,
-      public ScriptRegistrySwapHooks<ScriptType, ScriptRegistry<ScriptType>>
+    public ScriptRegistrySwapHooks<ScriptType, ScriptRegistry<ScriptType>>
 {
     template<typename>
     friend class UnsupportedScriptRegistrySwapHooks;
@@ -738,9 +738,9 @@ public:
 
     void SwapContext(bool initialize) final override
     {
-      this->BeforeSwapContext(initialize);
+        this->BeforeSwapContext(initialize);
 
-      _recently_added_ids.clear();
+        _recently_added_ids.clear();
     }
 
     void RemoveUsedScriptsFromContainer(std::unordered_set<std::string>& scripts) final override
@@ -754,7 +754,7 @@ public:
         this->BeforeUnload();
 
         ASSERT(_recently_added_ids.empty(),
-               "Recently added script ids should be empty here!");
+            "Recently added script ids should be empty here!");
 
         _scripts.clear();
         _ids_of_contexts.clear();
@@ -764,9 +764,9 @@ public:
     void AddScript(ScriptType* script)
     {
         ASSERT(script,
-               "Tried to call AddScript with a nullpointer!");
+            "Tried to call AddScript with a nullpointer!");
         ASSERT(!sScriptMgr->GetCurrentScriptContext().empty(),
-               "Tried to register a script without being in a valid script context!");
+            "Tried to register a script without being in a valid script context!");
 
         std::unique_ptr<ScriptType> script_ptr(script);
 
@@ -882,7 +882,7 @@ public:
 template<typename ScriptType>
 class SpecializedScriptRegistry<ScriptType, false>
     : public ScriptRegistryInterface,
-      public ScriptRegistrySwapHooks<ScriptType, ScriptRegistry<ScriptType>>
+    public ScriptRegistrySwapHooks<ScriptType, ScriptRegistry<ScriptType>>
 {
     template<typename, typename>
     friend class ScriptRegistrySwapHooks;
@@ -922,9 +922,9 @@ public:
     void AddScript(ScriptType* script)
     {
         ASSERT(script,
-               "Tried to call AddScript with a nullpointer!");
+            "Tried to call AddScript with a nullpointer!");
         ASSERT(!sScriptMgr->GetCurrentScriptContext().empty(),
-               "Tried to register a script without being in a valid script context!");
+            "Tried to register a script without being in a valid script context!");
 
         std::unique_ptr<ScriptType> script_ptr(script);
 
@@ -1001,7 +1001,7 @@ ScriptObject::~ScriptObject()
 }
 
 ScriptMgr::ScriptMgr()
-  : _scriptCount(0), _script_loader_callback(nullptr)
+    : _scriptCount(0), _script_loader_callback(nullptr)
 {
 }
 
@@ -1016,7 +1016,7 @@ ScriptMgr* ScriptMgr::instance()
 void ScriptMgr::Initialize()
 {
     ASSERT(sSpellMgr->GetSpellInfo(SPELL_HOTSWAP_VISUAL_SPELL_EFFECT)
-           && "Reload hotswap spell effect for creatures isn't valid!");
+        && "Reload hotswap spell effect for creatures isn't valid!");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1037,7 +1037,7 @@ void ScriptMgr::Initialize()
 
     // Load all static linked scripts through the script loader function.
     ASSERT(_script_loader_callback,
-           "Script loader callback wasn't registered!");
+        "Script loader callback wasn't registered!");
     _script_loader_callback();
 
     // Initialize all dynamic scripts
@@ -1064,7 +1064,7 @@ void ScriptMgr::Initialize()
             continue;
 
         TC_LOG_ERROR("sql.sql", "ScriptName '%s' exists in database, "
-                     "but no core script found!", scriptName.c_str());
+            "but no core script found!", scriptName.c_str());
     }
 
     TC_LOG_INFO("server.loading", ">> Loaded %u C++ scripts in %u ms",
@@ -1094,7 +1094,7 @@ void ScriptMgr::ReleaseScriptContext(std::string const& context)
 }
 
 std::shared_ptr<ModuleReference>
-    ScriptMgr::AcquireModuleReferenceOfScriptName(std::string const& scriptname) const
+ScriptMgr::AcquireModuleReferenceOfScriptName(std::string const& scriptname) const
 {
 #ifdef TRINITY_API_USE_DYNAMIC_LINKING
     // Returns the reference to the module of the given scriptname
@@ -1144,19 +1144,19 @@ void ScriptMgr::FillSpellSummary()
         {
             // Spell targets self.
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SELF-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SELF - 1);
 
             // Spell targets a single enemy.
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ENEMY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DEST_TARGET_ENEMY)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_ENEMY-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_ENEMY - 1);
 
             // Spell targets AoE at enemy.
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_SRC_AREA_ENEMY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_DEST_AREA_ENEMY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DEST_DYNOBJ_ENEMY)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_ENEMY-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_ENEMY - 1);
 
             // Spell targets an enemy.
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ENEMY ||
@@ -1165,19 +1165,19 @@ void ScriptMgr::FillSpellSummary()
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_DEST_AREA_ENEMY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DEST_DYNOBJ_ENEMY)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_ENEMY-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_ENEMY - 1);
 
             // Spell targets a single friend (or self).
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_PARTY)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_FRIEND-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_FRIEND - 1);
 
             // Spell targets AoE friends.
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER_AREA_PARTY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_LASTTARGET_AREA_PARTY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_FRIEND-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_FRIEND - 1);
 
             // Spell targets any friend (or self).
             if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER ||
@@ -1186,25 +1186,25 @@ void ScriptMgr::FillSpellSummary()
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER_AREA_PARTY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_LASTTARGET_AREA_PARTY ||
                 pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER)
-                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_FRIEND-1);
+                SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_FRIEND - 1);
 
             // Make sure that this spell includes a damage effect.
             if (pTempSpell->Effects[j].Effect == SPELL_EFFECT_SCHOOL_DAMAGE ||
                 pTempSpell->Effects[j].Effect == SPELL_EFFECT_INSTAKILL ||
                 pTempSpell->Effects[j].Effect == SPELL_EFFECT_ENVIRONMENTAL_DAMAGE ||
                 pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEALTH_LEECH)
-                SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_DAMAGE-1);
+                SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_DAMAGE - 1);
 
             // Make sure that this spell includes a healing effect (or an apply aura with a periodic heal).
             if (pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEAL ||
                 pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEAL_MAX_HEALTH ||
                 pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEAL_MECHANICAL ||
-                (pTempSpell->Effects[j].Effect == SPELL_EFFECT_APPLY_AURA  && pTempSpell->Effects[j].ApplyAuraName == 8))
-                SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_HEALING-1);
+                (pTempSpell->Effects[j].Effect == SPELL_EFFECT_APPLY_AURA && pTempSpell->Effects[j].ApplyAuraName == 8))
+                SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_HEALING - 1);
 
             // Make sure that this spell applies an aura.
             if (pTempSpell->Effects[j].Effect == SPELL_EFFECT_APPLY_AURA)
-                SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_AURA-1);
+                SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_AURA - 1);
         }
     }
 }
@@ -1387,15 +1387,15 @@ void ScriptMgr::OnCreateMap(Map* map)
     ASSERT(map);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnCreate(map);
+    itr->second->OnCreate(map);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnCreate((InstanceMap*)map);
+    itr->second->OnCreate((InstanceMap*)map);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnCreate((BattlegroundMap*)map);
+    itr->second->OnCreate((BattlegroundMap*)map);
     SCR_MAP_END;
 }
 
@@ -1404,15 +1404,15 @@ void ScriptMgr::OnDestroyMap(Map* map)
     ASSERT(map);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnDestroy(map);
+    itr->second->OnDestroy(map);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnDestroy((InstanceMap*)map);
+    itr->second->OnDestroy((InstanceMap*)map);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnDestroy((BattlegroundMap*)map);
+    itr->second->OnDestroy((BattlegroundMap*)map);
     SCR_MAP_END;
 }
 
@@ -1422,15 +1422,15 @@ void ScriptMgr::OnLoadGridMap(Map* map, GridMap* gmap, uint32 gx, uint32 gy)
     ASSERT(gmap);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnLoadGridMap(map, gmap, gx, gy);
+    itr->second->OnLoadGridMap(map, gmap, gx, gy);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnLoadGridMap((InstanceMap*)map, gmap, gx, gy);
+    itr->second->OnLoadGridMap((InstanceMap*)map, gmap, gx, gy);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnLoadGridMap((BattlegroundMap*)map, gmap, gx, gy);
+    itr->second->OnLoadGridMap((BattlegroundMap*)map, gmap, gx, gy);
     SCR_MAP_END;
 }
 
@@ -1440,15 +1440,15 @@ void ScriptMgr::OnUnloadGridMap(Map* map, GridMap* gmap, uint32 gx, uint32 gy)
     ASSERT(gmap);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnUnloadGridMap(map, gmap, gx, gy);
+    itr->second->OnUnloadGridMap(map, gmap, gx, gy);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnUnloadGridMap((InstanceMap*)map, gmap, gx, gy);
+    itr->second->OnUnloadGridMap((InstanceMap*)map, gmap, gx, gy);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnUnloadGridMap((BattlegroundMap*)map, gmap, gx, gy);
+    itr->second->OnUnloadGridMap((BattlegroundMap*)map, gmap, gx, gy);
     SCR_MAP_END;
 }
 
@@ -1460,15 +1460,15 @@ void ScriptMgr::OnPlayerEnterMap(Map* map, Player* player)
     FOREACH_SCRIPT(PlayerScript)->OnMapChanged(player);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnPlayerEnter(map, player);
+    itr->second->OnPlayerEnter(map, player);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnPlayerEnter((InstanceMap*)map, player);
+    itr->second->OnPlayerEnter((InstanceMap*)map, player);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnPlayerEnter((BattlegroundMap*)map, player);
+    itr->second->OnPlayerEnter((BattlegroundMap*)map, player);
     SCR_MAP_END;
 }
 
@@ -1478,15 +1478,15 @@ void ScriptMgr::OnPlayerLeaveMap(Map* map, Player* player)
     ASSERT(player);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnPlayerLeave(map, player);
+    itr->second->OnPlayerLeave(map, player);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnPlayerLeave((InstanceMap*)map, player);
+    itr->second->OnPlayerLeave((InstanceMap*)map, player);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnPlayerLeave((BattlegroundMap*)map, player);
+    itr->second->OnPlayerLeave((BattlegroundMap*)map, player);
     SCR_MAP_END;
 }
 
@@ -1495,15 +1495,15 @@ void ScriptMgr::OnMapUpdate(Map* map, uint32 diff)
     ASSERT(map);
 
     SCR_MAP_BGN(WorldMapScript, map, itr, end, entry, IsWorldMap);
-        itr->second->OnUpdate(map, diff);
+    itr->second->OnUpdate(map, diff);
     SCR_MAP_END;
 
     SCR_MAP_BGN(InstanceMapScript, map, itr, end, entry, IsDungeon);
-        itr->second->OnUpdate((InstanceMap*)map, diff);
+    itr->second->OnUpdate((InstanceMap*)map, diff);
     SCR_MAP_END;
 
     SCR_MAP_BGN(BattlegroundMapScript, map, itr, end, entry, IsBattleground);
-        itr->second->OnUpdate((BattlegroundMap*)map, diff);
+    itr->second->OnUpdate((BattlegroundMap*)map, diff);
     SCR_MAP_END;
 }
 
@@ -1566,6 +1566,26 @@ bool ScriptMgr::OnCastItemCombatSpell(Player* player, Unit* victim, SpellInfo co
     GET_SCRIPT_RET(ItemScript, item->GetScriptId(), tmpscript, true);
     return tmpscript->OnCastItemCombatSpell(player, victim, spellInfo, item);
 }
+
+
+void ScriptMgr::OnGossipSelect(Player* player, Item* item, uint32 sender, uint32 action)
+{
+    ASSERT(player);
+    ASSERT(item);
+
+    GET_SCRIPT(ItemScript, item->GetScriptId(), tmpscript);
+    tmpscript->OnGossipSelect(player, item, sender, action);
+}
+
+void ScriptMgr::OnGossipSelectCode(Player* player, Item* item, uint32 sender, uint32 action, const char* code)
+{
+    ASSERT(player);
+    ASSERT(item);
+
+    GET_SCRIPT(ItemScript, item->GetScriptId(), tmpscript);
+    tmpscript->OnGossipSelectCode(player, item, sender, action, code);
+}
+
 
 CreatureAI* ScriptMgr::GetCreatureAI(Creature* creature)
 {
@@ -1951,6 +1971,16 @@ void ScriptMgr::OnPlayerUpdateZone(Player* player, uint32 newZone, uint32 newAre
     FOREACH_SCRIPT(PlayerScript)->OnUpdateZone(player, newZone, newArea);
 }
 
+void ScriptMgr::OnGossipSelect(Player* player, uint32 menu_id, uint32 sender, uint32 action)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnGossipSelect(player, menu_id, sender, action);
+}
+
+void ScriptMgr::OnGossipSelectCode(Player* player, uint32 menu_id, uint32 sender, uint32 action, const char* code)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnGossipSelectCode(player, menu_id, sender, action, code);
+}
+
 void ScriptMgr::OnQuestStatusChange(Player* player, uint32 questId)
 {
     FOREACH_SCRIPT(PlayerScript)->OnQuestStatusChange(player, questId);
@@ -2034,7 +2064,7 @@ void ScriptMgr::OnGuildMemberDepositMoney(Guild* guild, Player* player, uint32 &
 }
 
 void ScriptMgr::OnGuildItemMove(Guild* guild, Player* player, Item* pItem, bool isSrcBank, uint8 srcContainer, uint8 srcSlotId,
-            bool isDestBank, uint8 destContainer, uint8 destSlotId)
+    bool isDestBank, uint8 destContainer, uint8 destSlotId)
 {
     FOREACH_SCRIPT(GuildScript)->OnItemMove(guild, player, pItem, isSrcBank, srcContainer, srcSlotId, isDestBank, destContainer, destSlotId);
 }

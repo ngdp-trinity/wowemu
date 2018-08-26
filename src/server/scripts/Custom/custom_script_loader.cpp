@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,11 +15,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This is where scripts' loading functions should be declared:
-
+ // This is where scripts' loading functions should be declared:
+void AddSC_Transmogrification();
+void AddSC_REFORGER_NPC();
+void AddSC_PlayerGossip();
+void AddSC_ItemGossip();
+void AddSC_Multivendor();
+void AddSC_NPC_TransmogDisplayVendor();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
 void AddCustomScripts()
 {
+    AddSC_Transmogrification();
+    AddSC_REFORGER_NPC();
+    AddSC_PlayerGossip();
+    AddSC_ItemGossip();
+    AddSC_Multivendor();
+    AddSC_NPC_TransmogDisplayVendor();
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,12 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-Name: npc_commandscript
-%Complete: 100
-Comment: All npc related commands
-Category: commandscripts
-EndScriptData */
+ /* ScriptData
+ Name: npc_commandscript
+ %Complete: 100
+ Comment: All npc related commands
+ Category: commandscripts
+ EndScriptData */
 
 #include "ScriptMgr.h"
 #include "Chat.h"
@@ -342,7 +342,7 @@ public:
         if (!charID)
             return false;
 
-        uint32 id  = atoul(charID);
+        uint32 id = atoul(charID);
         if (!sObjectMgr->GetCreatureTemplate(id))
             return false;
 
@@ -397,7 +397,7 @@ public:
         if (!*args)
             return false;
 
-        char* pitem  = handler->extractKeyFromLink((char*)args, "Hitem");
+        char* pitem = handler->extractKeyFromLink((char*)args, "Hitem");
         if (!pitem)
         {
             handler->SendSysMessage(LANG_COMMAND_NEEDITEMSEND);
@@ -431,7 +431,8 @@ public:
             return false;
         }
 
-        uint32 vendor_entry = vendor->GetEntry();
+        char* addMulti = strtok(NULL, " ");
+        uint32 vendor_entry = addMulti ? handler->GetSession()->GetCurrentVendor() : vendor ? vendor->GetEntry() : 0;
 
         if (!sObjectMgr->IsVendorItemValid(vendor_entry, itemId, maxcount, incrtime, extendedcost, handler->GetSession()->GetPlayer()))
         {
@@ -530,7 +531,7 @@ public:
         if (!*args)
             return false;
 
-        uint8 lvl = (uint8) atoi(args);
+        uint8 lvl = (uint8)atoi(args);
         if (lvl < 1 || lvl > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL) + 3)
         {
             handler->SendSysMessage(LANG_BAD_VALUE);
@@ -546,8 +547,8 @@ public:
             return false;
         }
 
-        creature->SetMaxHealth(100 + 30*lvl);
-        creature->SetHealth(100 + 30*lvl);
+        creature->SetMaxHealth(100 + 30 * lvl);
+        creature->SetHealth(100 + 30 * lvl);
         creature->SetLevel(lvl);
         creature->SaveToDB();
 
@@ -612,7 +613,7 @@ public:
             return false;
         }
 
-        char* pitem  = handler->extractKeyFromLink((char*)args, "Hitem");
+        char* pitem = handler->extractKeyFromLink((char*)args, "Hitem");
         if (!pitem)
         {
             handler->SendSysMessage(LANG_COMMAND_NEEDITEMSEND);
@@ -621,7 +622,8 @@ public:
         }
         uint32 itemId = atoul(pitem);
 
-        if (!sObjectMgr->RemoveVendorItem(vendor->GetEntry(), itemId))
+        char* addMulti = strtok(NULL, " ");
+        if (!sObjectMgr->RemoveVendorItem(addMulti ? handler->GetSession()->GetCurrentVendor() : vendor->GetEntry(), itemId))
         {
             handler->PSendSysMessage(LANG_ITEM_NOT_IN_LIST, itemId);
             handler->SetSentErrorMessage(true);
@@ -683,7 +685,7 @@ public:
         if (!*args)
             return false;
 
-        uint32 npcFlags = (uint32) atoi(args);
+        uint32 npcFlags = (uint32)atoi(args);
 
         Creature* creature = handler->getSelectedCreature();
 
@@ -807,7 +809,7 @@ public:
 
         handler->PSendSysMessage(LANG_NPCINFO_FLAGS, target->GetUInt32Value(UNIT_FIELD_FLAGS_2), target->GetUInt32Value(UNIT_DYNAMIC_FLAGS), target->GetFaction());
         handler->PSendSysMessage(LANG_COMMAND_RAWPAWNTIMES, defRespawnDelayStr.c_str(), curRespawnDelayStr.c_str());
-        handler->PSendSysMessage(LANG_NPCINFO_LOOT,  cInfo->lootid, cInfo->pickpocketLootId, cInfo->SkinLootId);
+        handler->PSendSysMessage(LANG_NPCINFO_LOOT, cInfo->lootid, cInfo->pickpocketLootId, cInfo->SkinLootId);
         handler->PSendSysMessage(LANG_NPCINFO_DUNGEON_ID, target->GetInstanceId());
         handler->PSendSysMessage(LANG_NPCINFO_PHASEMASK, target->GetPhaseMask());
         handler->PSendSysMessage(LANG_NPCINFO_ARMOR, target->GetArmor());
@@ -869,8 +871,7 @@ public:
                 handler->PSendSysMessage(LANG_CREATURE_LIST_CHAT, guid, guid, creatureTemplate->Name.c_str(), x, y, z, mapId, "", "");
 
                 ++count;
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
 
         handler->PSendSysMessage(LANG_COMMAND_NEAR_NPC_MESSAGE, distance, count);
@@ -1173,7 +1174,7 @@ public:
         }
 
         MovementGeneratorType mtype = IDLE_MOTION_TYPE;
-        if (option >0.0f)
+        if (option > 0.0f)
             mtype = RANDOM_MOTION_TYPE;
 
         Creature* creature = handler->getSelectedCreature();
@@ -1431,8 +1432,8 @@ public:
         Creature* creatureTarget = handler->getSelectedCreature();
         if (!creatureTarget || creatureTarget->IsPet())
         {
-            handler->PSendSysMessage (LANG_SELECT_CREATURE);
-            handler->SetSentErrorMessage (true);
+            handler->PSendSysMessage(LANG_SELECT_CREATURE);
+            handler->SetSentErrorMessage(true);
             return false;
         }
 
@@ -1440,17 +1441,17 @@ public:
 
         if (player->GetPetGUID())
         {
-            handler->SendSysMessage (LANG_YOU_ALREADY_HAVE_PET);
-            handler->SetSentErrorMessage (true);
+            handler->SendSysMessage(LANG_YOU_ALREADY_HAVE_PET);
+            handler->SetSentErrorMessage(true);
             return false;
         }
 
         CreatureTemplate const* cInfo = creatureTarget->GetCreatureTemplate();
 
-        if (!cInfo->IsTameable (player->CanTameExoticPets()))
+        if (!cInfo->IsTameable(player->CanTameExoticPets()))
         {
-            handler->PSendSysMessage (LANG_CREATURE_NON_TAMEABLE, cInfo->Entry);
-            handler->SetSentErrorMessage (true);
+            handler->PSendSysMessage(LANG_CREATURE_NON_TAMEABLE, cInfo->Entry);
+            handler->SetSentErrorMessage(true);
             return false;
         }
 
@@ -1458,21 +1459,21 @@ public:
         Pet* pet = player->CreateTamedPetFrom(creatureTarget);
         if (!pet)
         {
-            handler->PSendSysMessage (LANG_CREATURE_NON_TAMEABLE, cInfo->Entry);
-            handler->SetSentErrorMessage (true);
+            handler->PSendSysMessage(LANG_CREATURE_NON_TAMEABLE, cInfo->Entry);
+            handler->SetSentErrorMessage(true);
             return false;
         }
 
         // place pet before player
         float x, y, z;
-        player->GetClosePoint (x, y, z, creatureTarget->GetCombatReach(), CONTACT_DISTANCE);
+        player->GetClosePoint(x, y, z, creatureTarget->GetCombatReach(), CONTACT_DISTANCE);
         pet->Relocate(x, y, z, float(M_PI) - player->GetOrientation());
 
         // set pet to defensive mode by default (some classes can't control controlled pets in fact).
         pet->SetReactState(REACT_DEFENSIVE);
 
         // calculate proper level
-        uint8 level = std::max<uint8>(player->getLevel()-5, creatureTarget->getLevel());
+        uint8 level = std::max<uint8>(player->getLevel() - 5, creatureTarget->getLevel());
 
         // prepare visual effect for levelup
         pet->SetUInt32Value(UNIT_FIELD_LEVEL, level - 1);
@@ -1659,16 +1660,16 @@ public:
         Player* chr = handler->GetSession()->GetPlayer();
 
         float  followAngle = (creature->GetAbsoluteAngle(chr) - chr->GetOrientation()) * 180.0f / float(M_PI);
-        float  followDist  = std::sqrt(std::pow(chr->GetPositionX() - creature->GetPositionX(), 2.f) + std::pow(chr->GetPositionY() - creature->GetPositionY(), 2.f));
-        uint32 groupAI     = 0;
+        float  followDist = std::sqrt(std::pow(chr->GetPositionX() - creature->GetPositionX(), 2.f) + std::pow(chr->GetPositionY() - creature->GetPositionY(), 2.f));
+        uint32 groupAI = 0;
         sFormationMgr->AddFormationMember(lowguid, followAngle, followDist, leaderGUID, groupAI);
         creature->SearchFormation();
 
         PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_CREATURE_FORMATION);
         stmt->setUInt32(0, leaderGUID);
         stmt->setUInt32(1, lowguid);
-        stmt->setFloat (2, followAngle);
-        stmt->setFloat (3, followDist);
+        stmt->setFloat(2, followAngle);
+        stmt->setFloat(3, followDist);
         stmt->setUInt32(4, groupAI);
 
         WorldDatabase.Execute(stmt);

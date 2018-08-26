@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -28,7 +28,7 @@
 
 enum LocaleConstant : uint8;
 
- // temporary hack until includes are sorted out (don't want to pull in Windows.h)
+// temporary hack until includes are sorted out (don't want to pull in Windows.h)
 #ifdef GetClassName
 #undef GetClassName
 #endif
@@ -143,7 +143,7 @@ TC_GAME_API extern DBCStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptSto
 TC_GAME_API extern DBCStorage <HolidaysEntry>                sHolidaysStore;
 TC_GAME_API extern DBCStorage <ItemEntry>                    sItemStore;
 TC_GAME_API extern DBCStorage <ItemBagFamilyEntry>           sItemBagFamilyStore;
-//TC_GAME_API extern DBCStorage <ItemDisplayInfoEntry>      sItemDisplayInfoStore; -- not used currently
+TC_GAME_API extern DBCStorage <ItemDisplayInfoEntry>		 sItemDisplayInfoStore; //-- not used currently
 TC_GAME_API extern DBCStorage <ItemExtendedCostEntry>        sItemExtendedCostStore;
 TC_GAME_API extern DBCStorage <ItemLimitCategoryEntry>       sItemLimitCategoryStore;
 TC_GAME_API extern DBCStorage <ItemRandomPropertiesEntry>    sItemRandomPropertiesStore;
